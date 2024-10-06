@@ -3,6 +3,9 @@ import { useState,useEffect,useRef } from 'react'
 import { Button } from './components/ui/button'
 import { Card,CardContent } from './components/ui/card'
 import { Textarea } from './components/ui/textarea'
+import { Slider } from './components/ui/slider'
+import { ThemeProvider } from "@/components/ui/ThemeProvider"
+import { ModeToggle } from './Toggle'
 import './App.css'
 
 function App() {
@@ -11,6 +14,8 @@ function App() {
   const teleprompterRef = useRef<HTMLDivElement>(null)
   const [scrollSpeed, setScrollSpeed] = useState(1)
   const [isFullScreen, setIsFullScreen] = useState(false)
+  const [textSize, setTextSize] = useState(16); 
+  
   useEffect(() => {
     let animationFrameId: number
 
@@ -28,17 +33,20 @@ function App() {
     return () => {
       cancelAnimationFrame(animationFrameId)
     }
-  }, [isScrolling])
+  }, [isScrolling,scrollSpeed])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(e.target.value)
   }
+const handleSliderChange = (value:any) => {
+    setTextSize(value);
+  };
 
   const handleToggleScroll = () => {
     setIsScrolling(!isScrolling)
   }
-  const handleSpeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setScrollSpeed(Number(e.target.value)) // Cambiar la velocidad
+  const handleSpeedChange = (value:any) => {
+    setScrollSpeed(Number(value)) // Cambiar la velocidad
   }
   const handleResetScroll = () => {
     if (teleprompterRef.current) {
@@ -50,9 +58,18 @@ function App() {
   }
 
   return (
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ModeToggle /> 
     <div className="container mx-auto p-4 w-full">
-    <h1 className="text-2xl font-bold mb-4">TELEPROMPT</h1>
-    <h2 className="text-l mb-4">Introduce tu texto, </h2>
+      <div className="flex flex-col place-content-between mx-auto w-full  ">
+     <img src="/cat.svg" alt=""  className=" rotate-0 h-24 scale-100 transition-all dark:-rotate-90 dark:hidden"/>
+        <img src="/catcopy.svg" alt=""  className="rotate-90 h-24 hidden  transition-all dark:rotate-0 dark:block"/>
+       
+      <h1 className="text-2xl font-bold mb-4">TELEPROMPT</h1>
+      </div>
+      
+    <h2 className="text-l mb-4">Introduce tu texto, ajusta tu fuente y velocidad, y suerte con la grabacion </h2>
+   
     <Textarea
       placeholder="Enter your text here..."
       value={inputText}
@@ -74,14 +91,24 @@ function App() {
         <label htmlFor="speed" className="block mb-2 font-semibold">
           Velocidad: {scrollSpeed}
         </label>
-        <input
-          type="range"
-          id="speed"
-          min="1"
-          max="3"
-          value={scrollSpeed}
-          onChange={handleSpeedChange}
-          className="w-full"
+        <Slider
+          
+          min={1}
+          max={3}
+          step={0.5}
+          value={[scrollSpeed]}
+          onValueChange={(value)=>handleSpeedChange(value[0])}
+          className="w-full mb-9"
+        />
+         <label htmlFor="size" className="block mb-2 font-semibold">
+          Fuente: {textSize} px
+        </label>
+        <Slider
+         value={[textSize]} 
+        min={12} // Valor mínimo del slider (10px)
+        max={72} // Valor máximo del slider (50px)
+        step={4} // Incremento del slider
+        onValueChange={(value) => handleSliderChange(value[0])}
         />
       </div>
     <Card className={`w-full bg-black border-4 border-red-600 ${isFullScreen ? 'fixed top-0 left-0 w-full h-full z-50' : 'relative'}`}>
@@ -96,13 +123,15 @@ function App() {
           ref={teleprompterRef}
           className="h-96 overflow-hidden text-center"
         >
-          <div className="text-white text-9xl p-4 whitespace-pre-wrap">
+          <div className="text-white p-4 whitespace-pre-wrap" style={{ 
+          fontSize: `${textSize}px`, }}>
             {inputText}
           </div>
         </div>
       </CardContent>
     </Card>
   </div>
+  </ThemeProvider>
   )
 }
 
