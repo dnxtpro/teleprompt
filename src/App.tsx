@@ -12,9 +12,9 @@ function App() {
   const [inputText, setInputText] = useState("")
   const [isScrolling, setIsScrolling] = useState(false)
   const teleprompterRef = useRef<HTMLDivElement>(null)
-  const [scrollSpeed, setScrollSpeed] = useState(1)
+  const [scrollSpeed, setScrollSpeed] = useState(1.5)
   const [isFullScreen, setIsFullScreen] = useState(false)
-  const [textSize, setTextSize] = useState(16); 
+  const [textSize, setTextSize] = useState(32); 
   
   useEffect(() => {
     let animationFrameId: number
@@ -111,10 +111,10 @@ const handleSliderChange = (value:any) => {
         onValueChange={(value) => handleSliderChange(value[0])}
         />
       </div>
-    <Card className={`w-full bg-black border-4 border-red-600 ${isFullScreen ? 'fixed top-0 left-0 w-full h-full z-50' : 'relative'}`}>
+    <Card className={`w-full bg-black border-4 border-violet-600 ${isFullScreen ? 'fixed top-0 left-0 w-full h-full z-40 ' : 'relative'}`}>
       <CardContent className="p-0">
       {isFullScreen && (
-          <Button onClick={handleToggleFullScreen} className="absolute top-4 right-4">
+          <Button onClick={handleToggleFullScreen} className="absolute top-4 left-4">
            Salir Pantalla Completa
           </Button>
         )}

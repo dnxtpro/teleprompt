@@ -23,7 +23,7 @@ export function ModeToggle() {
   
 
   return (
-    <div className="absolute right-0 top-0">
+    <div className="fixed right-0 top-0 z-50">
         <Switch
          checked={isDarkMode}
          onCheckedChange={handleThemeSwitch}
