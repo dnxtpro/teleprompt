@@ -67,3 +67,11 @@
     @apply bg-background text-foreground;
   }
 }
+#myInput {
+  text-align: left; /* Alinear el texto escrito a la derecha */
+}
+#myInput::placeholder {
+  direction: rtl; /* Dirección de texto izquierda a derecha para el placeholder */
+  text-align: right; /* Alinear el placeholder a la izquierda */
+  color: gray; /* Color del placeholder */
+}

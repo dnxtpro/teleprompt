@@ -70,12 +70,17 @@ const handleSliderChange = (value:any) => {
       
     <h2 className="text-l mb-4">Introduce tu texto, ajusta tu fuente y velocidad, y suerte con la grabacion </h2>
    
-    <Textarea
-      placeholder="Enter your text here..."
+    <Textarea 
+      placeholder="
+
+الجمال في هذا العالم ينعكس في كل شيء حولنا. من الأشجار الخضراء التي تزين الأرض إلى زهورها الملونة التي تنشر العطر في الأجواء. تتلألأ النجوم في السماء كأنها لآلئ تتلألأ في ظلام الليل، بينما يشرق الشمس كل صباح ليعطي الأمل والدفء.
+
+"
       value={inputText}
       onChange={handleInputChange}
       className="mb-4"
       rows={5}
+      id="myInput"
     />
     <Button onClick={handleToggleScroll} className="m-4">
       {isScrolling ? "Stop" : "Start"} Teleprompter
@@ -114,9 +119,15 @@ const handleSliderChange = (value:any) => {
     <Card className={`w-full bg-black border-4 border-violet-600 ${isFullScreen ? 'fixed top-0 left-0 w-full h-full z-40 ' : 'relative'}`}>
       <CardContent className="p-0">
       {isFullScreen && (
-          <Button onClick={handleToggleFullScreen} className="absolute top-4 left-4">
-           Salir Pantalla Completa
-          </Button>
+        <div className="absolute top-0 left-1/3" ><Button onClick={handleToggleScroll} className="m-4">
+        {isScrolling ? "Stop" : "Start"} Teleprompter
+      </Button>
+      <Button onClick={handleResetScroll} className="m-4">
+          Volver Al Principio
+        </Button>
+        <Button onClick={handleToggleFullScreen} className="mb-4">
+          {isFullScreen ? "Exit Full Screen" : "Full Screen"}
+        </Button></div>
         )}
 
         <div
