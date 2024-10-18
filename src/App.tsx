@@ -60,7 +60,7 @@ function App() {
     setIsFullScreen(!isFullScreen) // Alterna entre pantalla completa y modo normal
   }
   
-  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseDown = () => {
     setDragging(true);
   };
 
