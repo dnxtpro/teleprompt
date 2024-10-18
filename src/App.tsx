@@ -15,7 +15,9 @@ function App() {
   const [scrollSpeed, setScrollSpeed] = useState(1.5)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [textSize, setTextSize] = useState(32);
-
+  const [Position, setPosition] = useState({top:200});
+  const [dragging, setDragging] = useState(false);
+  
   useEffect(() => {
     let animationFrameId: number
 
@@ -25,6 +27,7 @@ function App() {
         animationFrameId = requestAnimationFrame(scroll)
       }
     }
+
 
     if (isScrolling) {
       animationFrameId = requestAnimationFrame(scroll)
@@ -56,6 +59,24 @@ function App() {
   const handleToggleFullScreen = () => {
     setIsFullScreen(!isFullScreen) // Alterna entre pantalla completa y modo normal
   }
+  
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    setDragging(true);
+  };
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (dragging) {
+      const containerBounds = teleprompterRef.current?.getBoundingClientRect();
+      if (containerBounds) {
+        const newTop = Math.max(0, Math.min(event.clientY - containerBounds.top, containerBounds.height)); // Restringir dentro del contenedor
+        setPosition({ top: newTop });
+      }
+    }
+  };
+
+  const handleMouseUp = () => {
+    setDragging(false);
+  };
   const numberOfCats = 5;
 
   return (
@@ -118,8 +139,9 @@ function App() {
           />
         </div>
         <Card className={`w-full bg-black border-4 border-violet-600 ${isFullScreen ? 'fixed top-0 left-0 w-full h-full z-40 ' : 'relative'}`}>
-          <CardContent className="p-0">
+          <CardContent className="p-0 my-auto ">
             {isFullScreen && (
+              <div className="relative">
               <div className="absolute top-0 left-1/3" ><Button onClick={handleToggleScroll} className="m-4">
                 {isScrolling ? "Stop" : "Start"} Teleprompter
               </Button>
@@ -128,16 +150,27 @@ function App() {
                 </Button>
                 <Button onClick={handleToggleFullScreen} className="mb-4">
                   {isFullScreen ? "Exit Full Screen" : "Full Screen"}
-                </Button></div>
+                </Button>
+               
+                </div>
+                
+                
+        </div>
             )}
 
             <div
               ref={teleprompterRef}
-              className="h-96 overflow-hidden text-center"
+              className="h-96 overflow-hidden text-center "
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp} 
             >
-              <div className="text-white p-4 whitespace-pre-wrap" style={{
-                fontSize: `${textSize}px`,
-              }}>
+              <div className="text-white p-4 border border-gray-300 whitespace-pre-wrap absolute left-0 right-0 cursor-move select-none rounded-md" 
+              style={{
+                fontSize: `${textSize}px`, top: `${Position.top}px`
+              }}
+              onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}>
                 {inputText ? (
                   inputText
                 ) : (
