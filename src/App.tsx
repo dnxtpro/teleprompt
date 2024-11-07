@@ -81,6 +81,7 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Analytics/>
       <ModeToggle />
       <div className="container mx-auto p-4 w-full">
         <div className="flex flex-col place-content-between mx-auto w-full  ">
